@@ -1,0 +1,684 @@
+{
+	"info": {
+		"_postman_id": "e1813964-5424-45dd-909a-29888983dfca",
+		"name": "QA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18282617"
+	},
+	"item": [
+		{
+			"name": "Flow for Checking Basic Steps",
+			"item": [
+				{
+					"name": "1. Authenticate",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"api_token\", jsonData.id_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"tMgstz6Q%kylU;^!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{platform_url}}/api/v1/admin/authenticate",
+							"host": [
+								"{{platform_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Create Player",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{platform_url}}/api/v1/agents/players/create?externalPlayerId=samvelbsbwP&loginName=samvel&nickName=samvel&timestamp=&sign=&tenantId=&productId=A28&childProductId=&walletType=AS_WALLET&token=asd&webSiteProductId=qwe",
+							"host": [
+								"{{platform_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"agents",
+								"players",
+								"create"
+							],
+							"query": [
+								{
+									"key": "externalPlayerId",
+									"value": "samvelbsbwP"
+								},
+								{
+									"key": "loginName",
+									"value": "samvel"
+								},
+								{
+									"key": "nickName",
+									"value": "samvel"
+								},
+								{
+									"key": "timestamp",
+									"value": ""
+								},
+								{
+									"key": "sign",
+									"value": ""
+								},
+								{
+									"key": "tenantId",
+									"value": ""
+								},
+								{
+									"key": "productId",
+									"value": "A28"
+								},
+								{
+									"key": "childProductId",
+									"value": ""
+								},
+								{
+									"key": "walletType",
+									"value": "AS_WALLET",
+									"description": "mandatory - AS_WALLET or MONEY_TRANSFER"
+								},
+								{
+									"key": "token",
+									"value": "asd",
+									"description": "mandatory"
+								},
+								{
+									"key": "webSiteProductId",
+									"value": "qwe",
+									"description": "mandatory"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Transfer-In Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var randomUUID = require('uuid').v4();\r",
+									"postman.setEnvironmentVariable(\"externalTransactionId\", randomUUID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{platform_url}}/api/v1/agents/players/accounts/transfers/in/perform?externalPlayerId=sammvel&externalTransactionId={{externalTransactionId}}&amount=10000000&currency=CANDY-HOT&timestamp&sign=&tenantId=",
+							"host": [
+								"{{platform_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"agents",
+								"players",
+								"accounts",
+								"transfers",
+								"in",
+								"perform"
+							],
+							"query": [
+								{
+									"key": "externalPlayerId",
+									"value": "sammvel"
+								},
+								{
+									"key": "externalTransactionId",
+									"value": "{{externalTransactionId}}"
+								},
+								{
+									"key": "amount",
+									"value": "10000000"
+								},
+								{
+									"key": "currency",
+									"value": "CANDY-HOT"
+								},
+								{
+									"key": "timestamp",
+									"value": null
+								},
+								{
+									"key": "sign",
+									"value": ""
+								},
+								{
+									"key": "tenantId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. Get Game URL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"var gameUrl = jsonData.gameUrl.replace(/.*token=/g, '');\r",
+									"postman.setEnvironmentVariable(\"game_user_token\", gameUrl);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{platform_url}}/api/v1/agents/players/games/url?externalPlayerId=sammvel&gameCode={{game_code}}&lang=en&timestamp&sign=&tenantId=&currency=CANDY-HOT",
+							"host": [
+								"{{platform_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"agents",
+								"players",
+								"games",
+								"url"
+							],
+							"query": [
+								{
+									"key": "externalPlayerId",
+									"value": "sammvel"
+								},
+								{
+									"key": "gameCode",
+									"value": "{{game_code}}"
+								},
+								{
+									"key": "lang",
+									"value": "en"
+								},
+								{
+									"key": "timestamp",
+									"value": null
+								},
+								{
+									"key": "sign",
+									"value": ""
+								},
+								{
+									"key": "tenantId",
+									"value": ""
+								},
+								{
+									"key": "currency",
+									"value": "CANDY-HOT"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer-Out Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var randomUUID = require('uuid').v4();\r",
+									"postman.setEnvironmentVariable(\"externalTransactionId\", randomUUID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{platform_url}}/api/v1/agents/players/accounts/transfers/out/perform?externalPlayerId=Samvel&externalTransactionId={{externalTransactionId}}&currency=CNY&timestamp&sign=&tenantId=",
+							"host": [
+								"{{platform_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"agents",
+								"players",
+								"accounts",
+								"transfers",
+								"out",
+								"perform"
+							],
+							"query": [
+								{
+									"key": "externalPlayerId",
+									"value": "Samvel"
+								},
+								{
+									"key": "externalTransactionId",
+									"value": "{{externalTransactionId}}"
+								},
+								{
+									"key": "currency",
+									"value": "CNY"
+								},
+								{
+									"key": "timestamp",
+									"value": null
+								},
+								{
+									"key": "sign",
+									"value": ""
+								},
+								{
+									"key": "tenantId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Autotest",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var game_codes = pm.environment.get(\"game_codes\");",
+									"if (!game_codes) {",
+									"    game_codes = [\"MOON\", \"COINFLIP\", \"STAIRS\", \"MINES\", \"HILO\", \"DICE\", \"PLINKO\", \"LIMBO\", \"CIRCLE\", \"BOMB\", \"BALLOON\", \"ROULETTE\", \"PREDICTION\", \"CRYPTOS\", \"FISHING\", \"STRIKER\", \"ROBOT\"];",
+									"    }",
+									"    var currentGame_code = game_codes.shift();",
+									"    pm.environment.set(\"game_code\", currentGame_code);",
+									"    pm.environment.set(\"game_codes\", game_codes);",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.environment.get(\"host\") + \":\" + pm.environment.get(\"platform_port\") + \"/api/v1/admin/authenticate\",",
+									"    method: \"POST\",",
+									"    header: {",
+									"        \"Content-Type\": \"application/json\"",
+									"        },",
+									"        body: {",
+									"            mode: \"raw\",",
+									"            raw: JSON.stringify({",
+									"            username: \"admin\", ",
+									"            password: \"tMgstz6Q%kylU;^!\"",
+									"            }",
+									"        )",
+									"      }",
+									"})",
+									"",
+									"function getRandomString() { ",
+									"    return Math.random().toString(36).substring(2); }",
+									"var random_name = getRandomString();",
+									"",
+									"pm.environment.set(\"name\", random_name)",
+									"",
+									"pm.sendRequest({",
+									"    url:  pm.environment.get(\"host\") + \":\" + pm.environment.get(\"platform_port\") + \"/api/v1/agents/players/create?externalPlayerId=\" + pm.environment.get(\"name\") + \"&loginName=\" + pm.environment.get(\"name\") + \"&nickName=\" + pm.environment.get(\"name\") + \"&timestamp=&sign=&tenantId=\",",
+									"    method: \"GET\",",
+									"",
+									"})",
+									"",
+									"pm.sendRequest({",
+									"    url:  pm.environment.get(\"host\") + \":\" + pm.environment.get(\"platform_port\") + \"/api/v1/agents/players/accounts/transfers/in/perform?externalPlayerId=\" + pm.environment.get(\"name\") + \"&externalTransactionId=\" + pm.environment.get(\"externalTransactionId\") + \"&amount=10000000&currency=CNY&timestamp&sign=&tenantId=\",",
+									"    method: \"GET\"",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var game_codes = pm.environment.get(\"game_codes\");",
+									"if (game_codes && game_codes.length > 0){",
+									"    postman.setNextRequest(\"Autotest\");",
+									"}",
+									"else {",
+									"    postman.setNextRequest(null);",
+									"    postman.clearEnvironmentVariable(\"game_codes\");",
+									"}",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.collectionVariables.get(\"variable_key\");",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									"",
+									"pm.test(\"Body matches name\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"gameUrl\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{platform_url}}/api/v1/agents/players/games/url?externalPlayerId={{name}}&gameCode={{game_code}}&lang=en&timestamp&sign=&tenantId=&currency=CNY",
+							"host": [
+								"{{platform_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"agents",
+								"players",
+								"games",
+								"url"
+							],
+							"query": [
+								{
+									"key": "externalPlayerId",
+									"value": "{{name}}"
+								},
+								{
+									"key": "gameCode",
+									"value": "{{game_code}}"
+								},
+								{
+									"key": "lang",
+									"value": "en"
+								},
+								{
+									"key": "timestamp",
+									"value": null
+								},
+								{
+									"key": "sign",
+									"value": ""
+								},
+								{
+									"key": "tenantId",
+									"value": ""
+								},
+								{
+									"key": "currency",
+									"value": "CNY"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Flow for Maintenance Pop-Up",
+			"item": [
+				{
+					"name": "1. Authenticate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"api_token\", jsonData.id_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"tMgstz6Q%kylU;^!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{platform_url}}/api/v1/admin/authenticate",
+							"host": [
+								"{{platform_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Suspend Game (activate popup)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{api_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{platform_url}}/api/v1/admin/games/:gameCode/suspend",
+							"host": [
+								"{{platform_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"games",
+								":gameCode",
+								"suspend"
+							],
+							"variable": [
+								{
+									"key": "gameCode",
+									"value": "MOON"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Resume Game (deactivate popup)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{api_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{platform_url}}/api/v1/admin/games/:gameCode/resume",
+							"host": [
+								"{{platform_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"games",
+								":gameCode",
+								"resume"
+							],
+							"variable": [
+								{
+									"key": "gameCode",
+									"value": "MOON"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Agent Game Controller Interface",
+			"item": [
+				{
+					"name": "1. Authenticate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"api_token\", jsonData.id_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"tMgstz6Q%kylU;^!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{platform_url}}/api/v1/admin/authenticate",
+							"host": [
+								"{{platform_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admin",
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. To revoke the betslip",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{api_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{platform_url}}/api/v1/agents/players/games/betslips/:betslipId/revoke?tenantId=as_platform&timestamp&sign",
+							"host": [
+								"{{platform_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"agents",
+								"players",
+								"games",
+								"betslips",
+								":betslipId",
+								"revoke"
+							],
+							"query": [
+								{
+									"key": "tenantId",
+									"value": "as_platform"
+								},
+								{
+									"key": "timestamp",
+									"value": null
+								},
+								{
+									"key": "sign",
+									"value": null
+								}
+							],
+							"variable": [
+								{
+									"key": "betslipId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
